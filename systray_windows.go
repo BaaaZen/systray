@@ -309,7 +309,7 @@ func (t *winTray) initInstance() error {
 	)
 
 	t.wmSystrayMessage = WM_USER + 1
-	
+
 	taskbarEventNamePtr, _ := syscall.UTF16PtrFromString("TaskbarCreated")
 	// https://msdn.microsoft.com/en-us/library/windows/desktop/ms644947
 	res, _, err := pRegisterWindowMessage.Call(
@@ -651,10 +651,9 @@ func quit() {
 	)
 }
 
-
 func SetIconFile(filepath string) {
 	if err := wt.setIcon(filepath); err != nil {
-		log.Errorf("Unable to set icon: %v", err)
+		log.Printf("Unable to set icon: %v", err)
 		return
 	}
 }
