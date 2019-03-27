@@ -6,6 +6,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"sort"
@@ -594,12 +595,12 @@ func (t *winTray) getVisibleItemIndex(val int32) int {
 
 func nativeLoop() {
 	if err := wt.initInstance(); err != nil {
-		log.Errorf("Unable to init instance: %v", err)
+		log.Printf("Unable to init instance: %v", err)
 		return
 	}
 
 	if err := wt.createMenu(); err != nil {
-		log.Errorf("Unable to create menu: %v", err)
+		log.Printf("Unable to create menu: %v", err)
 		return
 	}
 
@@ -628,7 +629,7 @@ func nativeLoop() {
 		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms644936(v=vs.85).aspx
 		switch int32(ret) {
 		case -1:
-			log.Errorf("Error at message loop: %v", err)
+			log.Printf("Error at message loop: %v", err)
 			return
 		case 0:
 			return
@@ -668,13 +669,13 @@ func SetIcon(iconBytes []byte) {
 
 	if _, err := os.Stat(iconFilePath); os.IsNotExist(err) {
 		if err := ioutil.WriteFile(iconFilePath, iconBytes, 0644); err != nil {
-			log.Errorf("Unable to write icon data to temp file: %v", err)
+			log.Printf("Unable to write icon data to temp file: %v", err)
 			return
 		}
 	}
 
 	if err := wt.setIcon(iconFilePath); err != nil {
-		log.Errorf("Unable to set icon: %v", err)
+		log.Printf("Unable to set icon: %v", err)
 		return
 	}
 }
@@ -693,7 +694,7 @@ func (item *MenuItem) SetIcon(iconBytes []byte) {
 // only available on Mac and Windows.
 func SetTooltip(tooltip string) {
 	if err := wt.setTooltip(tooltip); err != nil {
-		log.Errorf("Unable to set tooltip: %v", err)
+		log.Printf("Unable to set tooltip: %v", err)
 		return
 	}
 }
@@ -701,7 +702,7 @@ func SetTooltip(tooltip string) {
 func addOrUpdateMenuItem(item *MenuItem) {
 	err := wt.addOrUpdateMenuItem(item.id, item.title, item.disabled, item.checked)
 	if err != nil {
-		log.Errorf("Unable to addOrUpdateMenuItem: %v", err)
+		log.Printf("Unable to addOrUpdateMenuItem: %v", err)
 		return
 	}
 }
@@ -709,7 +710,7 @@ func addOrUpdateMenuItem(item *MenuItem) {
 func addSeparator(id int32) {
 	err := wt.addSeparatorMenuItem(id)
 	if err != nil {
-		log.Errorf("Unable to addSeparator: %v", err)
+		log.Printf("Unable to addSeparator: %v", err)
 		return
 	}
 }
@@ -717,7 +718,7 @@ func addSeparator(id int32) {
 func hideMenuItem(item *MenuItem) {
 	err := wt.hideMenuItem(item.id)
 	if err != nil {
-		log.Errorf("Unable to hideMenuItem: %v", err)
+		log.Printf("Unable to hideMenuItem: %v", err)
 		return
 	}
 }
